@@ -38,8 +38,17 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-  // We ignore external API requests to jsonhosting.com so they aren't cached incorrectly
-  if (e.request.url.includes("jsonhosting.com") || e.request.url.includes("api.qrserver.com")) {
+  // Only intercept GET requests
+  if (e.request.method !== "GET") {
+    return;
+  }
+  
+  // Ignore external API requests to avoid caching or sync disruptions
+  if (
+    e.request.url.includes("api.github.com") ||
+    e.request.url.includes("jsonhosting.com") || 
+    e.request.url.includes("api.qrserver.com")
+  ) {
     return;
   }
   
